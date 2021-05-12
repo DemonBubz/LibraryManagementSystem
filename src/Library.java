@@ -1,21 +1,23 @@
 import java.util.Random;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.UUID;
 
 class Books{
-     protected int bookId,price,quantity;
+    protected UUID bookId;
+     protected int price,quantity;
      protected String bookName,writerName;
      Books(){
-         System.out.println("Book Object created");
+
      }
-    Books(int bookId, int price, int quantity, String bookName, String writerName){
+    Books(UUID bookId, int price, int quantity, String bookName, String writerName){
         this.bookId=bookId;
         this.price=price;
         this.quantity=quantity;
         this.bookName=bookName;
         this.writerName=writerName;
     }
-public void setBookId(int bookId){
+public void setBookId(UUID bookId){
         this.bookId=bookId;
 }
 public void setPrice(int price){
@@ -30,7 +32,7 @@ public void setBookName(String bookName){
 public void setWriterName(String writerName){
         this.writerName=writerName;
 }
-public int getBookId(){
+public UUID getBookId(){
          return bookId;
 }
 public int getPrice(){
@@ -51,9 +53,10 @@ public class Library {
     static ArrayList<Books>booksArrayList=new ArrayList<>();
     static Books myBooks=new Books();
     public static void addBookElements(){
-        System.out.println("Enter Book Id");
-        myBooks.setBookId(scanner.nextInt());
-        int currBookId= myBooks.getBookId();
+        System.out.println("Generating ID for book");
+        UUID uid= UUID.randomUUID();
+        myBooks.setBookId(uid);
+        UUID currBookId= myBooks.getBookId();
 
         System.out.println("Enter Quantity");
         myBooks.setQuantity(scanner.nextInt());
