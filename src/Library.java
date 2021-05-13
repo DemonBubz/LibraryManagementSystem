@@ -99,12 +99,13 @@ class Mechanism{
         myBooks.setPrice(scanner.nextInt());
         int currBookPrice= myBooks.getPrice();
 
+        scanner.nextLine();
         System.out.println("Enter Book Name");
-        myBooks.setBookName(scanner.next());
+        myBooks.setBookName(scanner.nextLine());
         String currBookName= myBooks.getBookName();
 
         System.out.println("Enter Writer Name");
-        myBooks.setWriterName(scanner.next());
+        myBooks.setWriterName(scanner.nextLine());
         String  currWriterName= myBooks.getWriterName();
         booksArrayList.add(new Books(currBookId,currBookPrice,currBookQuantity,currBookName,currWriterName));
     }
@@ -149,13 +150,16 @@ class Mechanism{
                         System.out.println("Delete Query");//Trying to remove an element from book to check parameters->
                         System.out.println("Do you remember writer's name alongside book name y/n?");
                         if(scanner.next().equals("y")) {
-                            System.out.print("Enter book name ");
-                            bookName = scanner.next();
-                            System.out.print("\nEnter Writer Name");
-                            writerName = scanner.next();
+                            scanner.nextLine();
+                            System.out.print("Enter book name");
+                            bookName = scanner.nextLine();
+                            System.out.print("Enter Writer Name");
+                            writerName = scanner.nextLine();
                             menu_IsPresentBool=isPresent(bookName,writerName);
                         }else {
-                            bookName =scanner.next();
+                            System.out.print("Enter Book name");
+                            scanner.nextLine();
+                            bookName =scanner.nextLine();
                             menu_IsPresentBool = isPresent(bookName);
                         }
                         if(menu_IsPresentBool){
@@ -163,18 +167,7 @@ class Mechanism{
                             int delQuantity=scanner.nextInt();
                         for(int i=0;i<booksArrayList.size();i++){
                             Books temp=booksArrayList.get(i);
-                            if(temp.bookName.equals(bookName) && temp.getQuantity()==1){       //if quantity of book type is 0 remove it completely
-                                if(delQuantity>temp.getQuantity())
-                                {
-                                    try {throw new delBookException();}
-                                    catch (delBookException e){
-                                        e.printStackTrace();
-                                    }
-                                }else if(delQuantity==temp.getQuantity())
-                                {
-                                    booksArrayList.remove(temp);
-                                }
-                            }else if(temp.bookName.equals(bookName) && temp.getQuantity()>1){//else if quantity is greater than 1 reduce it by 1
+                                if(temp.bookName.equals(bookName) && temp.getQuantity()>=1){
                                 if(delQuantity>temp.getQuantity())
                                 {
                                     try {throw new delBookException();}
@@ -191,7 +184,7 @@ class Mechanism{
                                 }
                             }
                         }
-                        }
+                        }else System.out.println("Book whose details are entered is not present");
                         System.out.println("Would you like to exit y/n");
                         if(scanner.next().equals("n"))
                             menuImplementation();
