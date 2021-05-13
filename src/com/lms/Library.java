@@ -65,13 +65,57 @@ class Mechanism implements DeleteMechanism,AddBooks,DisplaySpecificBookMechanism
                 }
 
             }
+            case 2->{
+                System.out.println("user");
+
+            }
         }
     }
 }
 public class Library {
-    public static void main(String[] args) {
-        Mechanism createConstruct =new Mechanism();
-        createConstruct.menuImplementation();
+   static Scanner scanner=new Scanner(System.in);
+    static ArrayList<User>userArrayList=new ArrayList<>();
+    static User myUser=new User();
 
+    public static void createAdmin(){
+        System.out.println("Enter name");
+        scanner.nextLine();
+        String name=scanner.nextLine();
+        System.out.println("Enter password");
+        String pass=scanner.nextLine();
+        userArrayList.add(new User(name,"Admin",pass));
+    }
+    public static void loginSession(){
+        System.out.println("Welcome to Library Management System");
+        System.out.println("1.Existing admin login");
+        System.out.println("2.Create new admin");
+        int c=scanner.nextInt();
+        switch(c){
+            case 1->{
+                System.out.println("checking database for existing admins..");
+                if(userArrayList.isEmpty()) {
+                    System.out.println("No admins found");
+                    createAdmin();
+                    loginSession();
+                }else {
+                    System.out.println("Login");
+                    System.out.println("Enter Name");
+                    scanner.nextLine();
+                    boolean userLogged=myUser.isPresentAndCheckPass(scanner.nextLine(),userArrayList);
+                    if(userLogged){
+                        Mechanism createConstruct =new Mechanism();
+                        createConstruct.menuImplementation();
+                    }
+                }
+            }
+
+            case 2->{
+                createAdmin();
+            }
+        }
+
+    }
+    public static void main(String[] args) {
+    loginSession();
     }
 }

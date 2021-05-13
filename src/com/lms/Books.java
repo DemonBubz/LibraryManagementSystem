@@ -3,20 +3,23 @@ package com.lms;
 import java.util.UUID;
 
 class Books{
-    protected UUID bookId;
+    boolean isIssued;
+    static protected int bookIdGenerator=0;
+    int bookId;
     protected int price,quantity;
     protected String bookName,writerName;
     Books(){
 
     }
-    Books(UUID bookId, int price, int quantity, String bookName, String writerName){
-        this.bookId=bookId;
+    Books(int price, int quantity, String bookName, String writerName){
+        bookIdGenerator=bookIdGenerator+1;
+        setBookId(bookIdGenerator);
         this.price=price;
         this.quantity=quantity;
         this.bookName=bookName;
         this.writerName=writerName;
     }
-    public void setBookId(UUID bookId){
+    protected void setBookId(int bookId){
         this.bookId=bookId;
     }
     public void setPrice(int price){
@@ -31,7 +34,7 @@ class Books{
     public void setWriterName(String writerName){
         this.writerName=writerName;
     }
-    public UUID getBookId(){
+    public int getBookId(){
         return bookId;
     }
     public int getPrice(){

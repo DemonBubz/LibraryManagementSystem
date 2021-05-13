@@ -8,9 +8,9 @@ public interface AddBooks {
     Scanner scanner=new Scanner(System.in);
     default  void addBookElements(Books myBooks, ArrayList<Books>booksArrayList){
         System.out.println("Generating ID for book");
-        UUID uid= UUID.randomUUID();
-        myBooks.setBookId(uid);
-        UUID currBookId= myBooks.getBookId();
+//        UUID uid= UUID.randomUUID();
+//        myBooks.setBookId(uid);
+//        UUID currBookId= myBooks.getBookId();
 
         System.out.print("Enter Quantity: ");
         myBooks.setQuantity(scanner.nextInt());
@@ -28,6 +28,6 @@ public interface AddBooks {
         System.out.print("Enter Writer Name: ");
         myBooks.setWriterName(scanner.nextLine());
         String  currWriterName= myBooks.getWriterName();
-        booksArrayList.add(new Books(currBookId,currBookPrice,currBookQuantity,currBookName,currWriterName));
+        booksArrayList.add(new Books(currBookPrice,currBookQuantity,currBookName,currWriterName));
     }
 }
