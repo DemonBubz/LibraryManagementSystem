@@ -12,20 +12,20 @@ public interface AddBooks {
         myBooks.setBookId(uid);
         UUID currBookId= myBooks.getBookId();
 
-        System.out.println("Enter Quantity");
+        System.out.print("Enter Quantity: ");
         myBooks.setQuantity(scanner.nextInt());
         int currBookQuantity= myBooks.getQuantity();
 
-        System.out.println("Enter Price");
+        System.out.print("Enter Price: ");
         myBooks.setPrice(scanner.nextInt());
         int currBookPrice= myBooks.getPrice();
 
         scanner.nextLine();
-        System.out.println("Enter Book Name");
+        System.out.print("Enter Book Name: ");
         myBooks.setBookName(scanner.nextLine());
         String currBookName= myBooks.getBookName();
 
-        System.out.println("Enter Writer Name");
+        System.out.print("Enter Writer Name: ");
         myBooks.setWriterName(scanner.nextLine());
         String  currWriterName= myBooks.getWriterName();
         booksArrayList.add(new Books(currBookId,currBookPrice,currBookQuantity,currBookName,currWriterName));

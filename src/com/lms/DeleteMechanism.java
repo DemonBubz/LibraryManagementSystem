@@ -11,7 +11,7 @@ public interface DeleteMechanism extends CheckIfPresent{
             int delQuantity=scanner.nextInt();
             for(int i=0;i<booksArrayList.size();i++){
                 Books temp=booksArrayList.get(i);
-                if(temp.bookName.equals(wOb)||temp.writerName.equals(wOb) && temp.getQuantity()>=1){
+                if(temp.bookName.equalsIgnoreCase(wOb)||temp.writerName.equalsIgnoreCase(wOb) && temp.getQuantity()>=1){
                     if(delQuantity>temp.getQuantity())
                     {
                         try {throw new delBookException();}

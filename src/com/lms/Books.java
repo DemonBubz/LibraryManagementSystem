@@ -47,8 +47,9 @@ class Books{
         return writerName;
     }
     public void bookMenu(){
-        System.out.println("1.Add com.lms.Books");
-        System.out.println("2.Delete com.lms.Books");
-        System.out.println("3.Display com.lms.Books");
+        System.out.println("1.Add Books");
+        System.out.println("2.Delete Books");
+        System.out.println("3.Display all Books");
+        System.out.println("4.Display Specific Book");
     }
 }
