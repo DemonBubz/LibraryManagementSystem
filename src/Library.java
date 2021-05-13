@@ -52,7 +52,11 @@ public void bookMenu(){
     System.out.println("3.Display Books");
 }
 }
-
+class delBookException extends Exception{
+    public String toString(){
+        return "InputExceedsDBCapacity";
+    }
+}
 class Mechanism{
      Scanner scanner=new Scanner(System.in);
      ArrayList<Books>booksArrayList=new ArrayList<>();
@@ -145,7 +149,9 @@ class Mechanism{
                         System.out.println("Delete Query");//Trying to remove an element from book to check parameters->
                         System.out.println("Do you remember writer's name alongside book name y/n?");
                         if(scanner.next().equals("y")) {
+                            System.out.print("Enter book name ");
                             bookName = scanner.next();
+                            System.out.print("\nEnter Writer Name");
                             writerName = scanner.next();
                             menu_IsPresentBool=isPresent(bookName,writerName);
                         }else {
@@ -153,14 +159,36 @@ class Mechanism{
                             menu_IsPresentBool = isPresent(bookName);
                         }
                         if(menu_IsPresentBool){
+                            System.out.println("Enter the quantity of books to be removed");
+                            int delQuantity=scanner.nextInt();
                         for(int i=0;i<booksArrayList.size();i++){
                             Books temp=booksArrayList.get(i);
                             if(temp.bookName.equals(bookName) && temp.getQuantity()==1){       //if quantity of book type is 0 remove it completely
-                                booksArrayList.remove(temp);
-                            }else if(temp.bookName.equals(bookName) && temp.getQuantity()>1){   //else if quantity is greater than 1 reduce it by 1
-                                int quant=temp.getQuantity();
-                                quant=quant-1;
-                                temp.setQuantity(quant);
+                                if(delQuantity>temp.getQuantity())
+                                {
+                                    try {throw new delBookException();}
+                                    catch (delBookException e){
+                                        e.printStackTrace();
+                                    }
+                                }else if(delQuantity==temp.getQuantity())
+                                {
+                                    booksArrayList.remove(temp);
+                                }
+                            }else if(temp.bookName.equals(bookName) && temp.getQuantity()>1){//else if quantity is greater than 1 reduce it by 1
+                                if(delQuantity>temp.getQuantity())
+                                {
+                                    try {throw new delBookException();}
+                                    catch (delBookException e){
+                                        e.printStackTrace();
+                                    }
+                                }else if(delQuantity==temp.getQuantity())
+                                {
+                                    booksArrayList.remove(temp);
+                                }else {
+                                    int quant = temp.getQuantity();
+                                    quant = quant - delQuantity;
+                                    temp.setQuantity(quant);
+                                }
                             }
                         }
                         }
