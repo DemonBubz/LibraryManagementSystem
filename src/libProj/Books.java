@@ -1,6 +1,8 @@
 package libProj;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.UUID;
 /*
 INTERFACE TO CHECK IF A ENTERED BOOK IS PRESENT IN THE ARRAYLIST
 CONTAINS TWO FUNCTIONS
@@ -59,14 +61,13 @@ MAIN BOOK CLASS IMPLEMENTS CHECK IF PRESENT INTERFACE AND SPECIFIC BOOK MECHANIS
 CONTAINS ARRAY LIST OF BOOKS AND OTHER DETAILS RELATED TO BOOKS
  */
 
-class Books implements CheckIfPresent,SpecificBookMechanism{
+class Books implements CheckIfPresent,SpecificBookMechanism,Serializable{
 //    boolean isIssued=false;
     ArrayList<Books>booksArrayList=new ArrayList<>();
-    Scanner scanner=new Scanner(System.in);
-    static protected int bookIdGenerator=0;
-    int bookId;
+      UUID bookId;
     protected int price,quantity;
     protected String bookName,writerName;
+
     /*
     ABSTRACT METHOD OF SPECIFIC BOOK MECHANISM IS DEFINED HENCEFORTH
      */
@@ -76,29 +77,31 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
         String bookName,writerName;
         System.out.println("Search by book name or writer name b/w");
         if(scanner.next().equals("b")){
-            System.out.println("Enter Book Name");
+            System.out.print("Enter Book Name: ");
             scanner.nextLine();
             bookName=scanner.nextLine();
             found=isPresentBook(bookName,booksArrayList);   //CALLS IF PRESENT ON BASIS OF BOOK NAME
             if(found){
+                System.out.println("found");
                 for(int i=0;i<booksArrayList.size();i++){
                     Books book=booksArrayList.get(i);
-                    if(book.bookName.equalsIgnoreCase(bookName))
-                        temp=book;
-                    return temp;
+                    if(book.bookName.equalsIgnoreCase(bookName)) {
+                        return book;
+                    }
                 }
-            }
+            }else System.out.println("Not found the book");
         }else {
             scanner.nextLine();
-            System.out.print("Enter Writer Name");
+            System.out.print("Enter Writer Name: ");
             writerName = scanner.nextLine();
             found=isPresentWriter(writerName, booksArrayList);  //CALLS IF PRESENT ON THE BASIS OF WRITER NAME
             if(found){
                 for(int i=0;i<booksArrayList.size();i++){
                     Books book=booksArrayList.get(i);
-                    if(book.writerName.equalsIgnoreCase(writerName))
-                        temp=book;
-                    return temp;
+                    if(book.writerName.equalsIgnoreCase(writerName)) {
+                        temp = book;
+                        return temp;
+                    }
                 }
             }
         }
@@ -107,14 +110,13 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
     Books(){ }  //CONSTRUCTOR WITH NO PARAMETERS TO INITIATE OBJECT IN MAIN
 
     Books(int price, int quantity, String bookName, String writerName){     //CONSTRUCTOR AIMED AT ADDING NEW ELEMENTS
-        bookIdGenerator=bookIdGenerator+1;
-        setBookId(bookIdGenerator);
+        this.bookId=UUID.randomUUID();
         this.price=price;
         this.quantity=quantity;
         this.bookName=bookName;
         this.writerName=writerName;
     }
-        public void addBookElements(){
+        public void addBookElements() throws IOException{
         System.out.println("Generating ID for book");
 
         System.out.print("Enter Quantity: ");
@@ -134,9 +136,8 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
         setWriterName(scanner.nextLine());
         String currWriterName= getWriterName();
         booksArrayList.add(new Books(currBookPrice,currBookQuantity,currBookName,currWriterName));
-    }
-    protected void setBookId(int bookId){
-        this.bookId=bookId;
+        System.out.println();
+        serializeBook();
     }
     public void setPrice(int price){
         this.price=price;
@@ -150,7 +151,7 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
     public void setWriterName(String writerName){
         this.writerName=writerName;
     }
-    public int getBookId(){
+    public UUID getBookId(){
         return bookId;
     }
     public int getPrice(){
@@ -173,7 +174,7 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
         }
     }
 
-        public void delBooks(String wOb, boolean menu_IsPresentBool){
+        public void delBooks(String wOb, boolean menu_IsPresentBool) throws IOException {
         if(menu_IsPresentBool){
             System.out.println("Enter the quantity of books to be removed");
             int delQuantity=scanner.nextInt();
@@ -189,30 +190,34 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
                     }else if(delQuantity==temp.getQuantity())
                     {
                         booksArrayList.remove(temp);
+
                     }else {
                         int quant = temp.getQuantity();
                         quant = quant - delQuantity;
                         temp.setQuantity(quant);
+
                     }
+                    serializeBook();
+                    break;
                 }
             }
         }else System.out.println("Book whose details are entered is not present");
     }
 
     //Check for delete function
-    public String checkBeforeDel(){
+    public String checkBeforeDel() throws IOException {
         boolean menu_IsPresentBool;
         String bookName,writerName;
         System.out.println("Delete Query");//Trying to remove an element from book to check parameters->
         System.out.println("Do you remember writer's name or book name w/b?");
         if(scanner.next().equalsIgnoreCase("w")) {
             scanner.nextLine();
-            System.out.print("Enter Writer Name");
+            System.out.print("Enter Writer Name: ");
             writerName = scanner.nextLine();
             menu_IsPresentBool=isPresentWriter(writerName,booksArrayList);
             delBooks(writerName,menu_IsPresentBool);
         }else {
-            System.out.print("Enter Book name");
+            System.out.print("Enter Book name: ");
             scanner.nextLine();
             bookName =scanner.nextLine();
             menu_IsPresentBool = isPresentBook(bookName,booksArrayList);
@@ -222,5 +227,21 @@ class Books implements CheckIfPresent,SpecificBookMechanism{
         System.out.println("Would you like to exit y/n");
         return scanner.next();
 
+    }
+    public void serializeBook() throws IOException{
+            File file1=new File("book.ser");
+               FileOutputStream file = new FileOutputStream(file1);
+               ObjectOutputStream bookObject = new ObjectOutputStream(file);
+               bookObject.writeObject(booksArrayList);
+               bookObject.close();
+               file.close();
+
+    }
+    public void deserializeBook() throws IOException,ClassNotFoundException {
+            FileInputStream file = new FileInputStream("book.ser");
+            ObjectInputStream bookObject=new ObjectInputStream(file);
+            ArrayList<Books> bookListFromFile=(ArrayList<Books>) bookObject.readObject();
+            bookObject.close();
+           booksArrayList= bookListFromFile;
     }
 }
