@@ -1,5 +1,6 @@
 package libProj;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -66,12 +67,14 @@ class Mechanism{
                      if(book.getQuantity()>0){
                          issueBooks.add(new IssueBook(book.getBookId(),user.getUserId()));
                          user.haveIssued=true;
+                         book.issuedTo.add(user.name);
                          int quantity=book.getQuantity();
                          quantity--;
                          book.setQuantity(quantity);
                          serializeIssue();
                          userOb.serializeUser();
                          myBooksOb.serializeBook();
+                         System.out.println(book.getBookName()+" has been issued to "+user.getName()+" on "+LocalDate.now());
                      }else System.out.println("Not Available");
                  } System.out.println("Would you like to exit y/n");
                  if(scanner.next().equals("n"))
@@ -89,6 +92,9 @@ class Mechanism{
                  myBooksOb.serializeBook();;
                  userOb.serializeUser();
                  serializeIssue();
+                System.out.println("Would you like to exit y/n");
+                if (scanner.next().equals("n"))
+                    displayMainMenu();
             }
          }
     }
