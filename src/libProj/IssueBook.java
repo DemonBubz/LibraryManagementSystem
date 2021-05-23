@@ -57,6 +57,7 @@ public class IssueBook implements Serializable {
         LocalDate dNow=null;
         User foundUser=new User();
         UUID userAssociatedBookId = null;
+
         System.out.println("Enter name ");//take name
         Scanner scanner=new Scanner(System.in);
         String name=scanner.nextLine();
@@ -85,7 +86,7 @@ public class IssueBook implements Serializable {
                 }
                 for(Books ob:booklist){                     //user found user associated book id to find book object in booklist
                     if(ob.bookId.equals(userAssociatedBookId)){
-                        ob.issuedTo=null;
+                        ob.issuedTo.remove(name);
                         int quantity=ob.getQuantity();
                         quantity++;
                         ob.setQuantity(quantity);
