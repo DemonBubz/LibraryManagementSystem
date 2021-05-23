@@ -62,7 +62,7 @@ CONTAINS ARRAY LIST OF BOOKS AND OTHER DETAILS RELATED TO BOOKS
  */
 
 class Books implements CheckIfPresent,SpecificBookMechanism,Serializable{
-//    boolean isIssued=false;
+    ArrayList<String> issuedTo=new ArrayList<>();
     ArrayList<Books>booksArrayList=new ArrayList<>();
       UUID bookId;
     protected int price,quantity;
@@ -170,7 +170,7 @@ class Books implements CheckIfPresent,SpecificBookMechanism,Serializable{
     public void displayBookList() {
         for (int i = 0; i < booksArrayList.size(); i++) {
             Books book = booksArrayList.get(i);
-            System.out.println(book.bookId + " " + book.price + " " + book.quantity + " " + book.bookName + " " + book.writerName);
+            System.out.println("Id: "+book.bookId + " price: " + book.price + " quantity: " + book.quantity + " name: " + book.bookName + " writer: " + book.writerName+" Issued To: "+book.issuedTo);
         }
     }
 
