@@ -72,8 +72,12 @@ public class User implements Serializable{
         User Admin;
         for (int i=0;i<userArrayList.size();i++){
             Admin=userArrayList.get(i);
-            if(name.equals(Admin.name))
-                isPresent=true;
+            if(name.equals(Admin.name)) {
+                isPresent = true;
+            }else {
+                System.out.println("Admin by name "+name+" does not exist");
+                break;
+             }
             if(isPresent ){
                 if(Admin.role.equals("Admin")) {
                     System.out.print("Enter password: ");
@@ -82,7 +86,11 @@ public class User implements Serializable{
                     if (pass.equals(Admin.password)) {
                         AdminLogged = true;
                         break;
+                    }else{
+                        System.out.println("Wrong password");
                     }
+                }else{
+                    System.out.println("Not an admin");
                 }
             }
         }
